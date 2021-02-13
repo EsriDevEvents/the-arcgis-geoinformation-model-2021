@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>Overwrite previous web map properties with custom code - Cascade model</title>
+    <style>html,body,#viewDiv{padding:0;margin:0;height:100%;width:100%}</style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css"/>
+    <script src="https://js.arcgis.com/4.18/"></script>
+
+
+    <script type="module">
+
+        import MapView from "https://js.arcgis.com/4.18/@arcgis/core/views/MapView.js";
+        import WebMap from "https://js.arcgis.com/4.18/@arcgis/core/WebMap.js";
+
+        const webmap = new WebMap({
+            portalItem: {
+                id: "c1354b360f3d4d709220f134f10b744a"
+            }
+        });
+
+        webmap.basemap = "streets-navigation-vector";
+
+        const view = new MapView({
+            map: webmap,
+            container: "viewDiv",
+            extent: {
+                "spatialReference": {
+                    "latestWkid": 3857,
+                    "wkid": 102100
+                },
+                "xmin": -8248152.247738178,
+                "ymin": 4966727.712671695,
+                "xmax": -8228584.368497199,
+                "ymax": 4973836.356302207
+            }
+        });
+
+        webmap.when(function(){
+
+            // Changing colors: reducing the amount of red to a half
+            // let renderer = webmap.allLayers.getItemAt(1).renderer;
+
+            // renderer.visualVariables[0].stops = renderer.visualVariables[0].stops.map(el => el.color.r  = parseInt((el.color.r / 2)))
+
+            // webmap.allLayers.getItemAt(1).renderer = renderer
+
+            webmap.allLayers.getItemAt(1).renderer = {
+                type: "simple",
+                symbol: {
+                    type: "simple-fill",
+                    style: "diagonal-cross",
+                    outline: {
+                        style: "dot"
+                    }
+                }
+            };
+
+        });
+
+        </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Configurable Apps</title>
+  </head>
+
+  <body>
+    <h1 id="title"></h1>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search),
+              appTitle = document.getElementById('title');
+
+        if(!urlParams.has('appid')){
+            appTitle.innerText = 'Instance can not be loaded, `appid` param is not present';
+        }else{
+            const itemEndpoint = `https://www.arcgis.com/sharing/rest/content/items/${urlParams.get('appid')}/data?f=json'`;
+
+            fetch(itemEndpoint)
+                .then(response => {
+                    if (response.status !== 200) {
+                        console.error(response.status);
+                        appTitle.innerText = `Error: ${response.status}`;
+                        return;
+                    }
+
+                    response.json().then(function(data) {
+                        appTitle.innerText = data.values.title;
+                    });
+                });
+        }
+    </script>
+  </body>
+</html>
